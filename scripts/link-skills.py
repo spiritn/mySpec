@@ -25,7 +25,7 @@ def main():
 
     requested = list(args.skills or available)
     if "workflow" in requested:
-        requested.extend(("design", "task", "code", "review"))
+        requested.extend(("design", "task", "code", "review", "complete"))
     selected = list(dict.fromkeys(requested))
     unknown = [name for name in selected if name not in available]
     if unknown or not selected:

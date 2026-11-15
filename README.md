@@ -1,6 +1,6 @@
 # Shared AI Coding Skills
 
-用 `$workflow` 编排完整开发流程。设计、拆解、编码和评审四个阶段也可独立调用，通过同一需求目录和验收编号交接。
+用 `$workflow` 编排设计、拆解、编码和评审，按需接上归档。各阶段也可独立调用，通过同一工作项目录和验收编号交接。
 
 | Skill | 负责什么 | 默认产出 |
 | --- | --- | --- |
@@ -10,6 +10,7 @@
 | `$task` | 按依赖拆分方案，为各任务定义完成条件 | `tasks.md` |
 | `$code` | 按任务实施和验证，回填进度及结果 | 代码变更与任务执行记录 |
 | `$review` | 结合需求、实际 diff、工程规则和上下游做独立评审 | 带证据的风险分流、变更摘要和验证范围，按需写入 `review.md` |
+| `$complete` | 核对完成证据，判断主规格是否需要更新并归档工作项 | 归档目录及 `completion.md`，按范围同步主规格 |
 
 ## 在本机接入
 
@@ -22,7 +23,7 @@ python3 scripts/link-skills.py --project /path/to/project
 # 在指定项目启用文档初始化
 python3 scripts/link-skills.py --project /path/to/project init
 
-# 在指定项目启用总入口及其四个阶段
+# 在指定项目启用总入口和阶段 Skill
 python3 scripts/link-skills.py --project /path/to/project workflow
 
 # 在指定项目只启用设计和任务拆解
@@ -32,13 +33,13 @@ python3 scripts/link-skills.py --project /path/to/project design task
 python3 scripts/link-skills.py --user
 ```
 
-项目级适合先在一个仓库试用。全局和项目级同时链接同名 Skill 时，Codex 可能显示两个同名入口。给任一命令加 `--dry-run` 可预览目标路径和冲突。选择 `workflow` 会同时链接四个阶段。脚本会链接通用编码规范，重复执行会复用指向同一来源的链接。已有文件或其他来源的链接需要手动处理。
+项目级适合先在一个仓库试用。全局和项目级同时链接同名 Skill 时，Codex 可能显示两个同名入口。给任一命令加 `--dry-run` 可预览目标路径和冲突。选择 `workflow` 会同时链接 `design`、`task`、`code`、`review` 和 `complete`。脚本会链接通用编码规范，重复执行会复用指向同一来源的链接。已有文件或其他来源的链接需要手动处理。
 
 把 [AGENTS.example.md](AGENTS.example.md) 中适用的段落合并进目标项目的 `AGENTS.md`，填写真实的模块边界、验证命令和项目约束。模板会指示 Codex 在读取通用规范前检查路径。项目的 `AGENTS.md`、团队规范与项目内代码约定保留优先级。
 
 在目标项目的 Codex 会话里运行 `$init`，读取 `docs/` 或 `doc/` 的实际内容，创建或更新根目录 `AGENTS.md` 的文档地图。地图会标注各类文档的阅读时机和可用入口。已有项目指令继续由团队维护。
 
-每个需求有独立目录。优先采用项目约定或地图记录的 `increment/` 工作项路径，无项目约定时默认使用 `docs/changes/<work-item>/`。已有工单和工作项沿用原位置。小改动可以缩短文档，就地修复可直接进入实现。下面是常用入口。
+每个工作项有独立目录。未特别约定时，进行中的工单放在 `docs/changes/<work-item>/`，完成后归档到 `docs/changes/archive/YYYY-MM-DD-<work-item>/`。已有 `increment/` 的项目沿用实际目录和归档约定。小改动可以缩短文档，就地修复可直接进入实现。下面是常用入口。
 
 - `$init` 读取当前项目文档，建立或刷新 `AGENTS.md` 文档地图。
 - `$workflow` 做完「导出失败可重试」，写方案、拆任务、实现验证并评审当前 diff。
@@ -47,6 +48,7 @@ python3 scripts/link-skills.py --user
 - `$task` 基于这个需求目录生成任务清单，标明依赖、验收条件和验证方式。
 - `$code` 实现这个需求目录里的 T-01，验证后更新任务状态。
 - `$review` 在独立会话中评审这个 PR。对照需求和项目规则，给出文件行号、触发条件、影响和验证证据。
+- `$complete` 归档 ABC-123，并判断主规格是否要回填。需要一并同步时可说「同步已确认的主规格并归档」。
 
 `$code` 交付或创建 PR 前先做本地自查。PR 阶段在独立会话中运行 `$review`，维护者据证据决定如何修复与是否合并。项目的评审规则和关联契约可在 `AGENTS.md` 中指明来源。专项评审、规则沉淀以及精确率和召回率的评估见 [进阶评审](skills/review/references/advanced.md)。
 

@@ -9,6 +9,6 @@
 | `rules/` | `engineering/` 工程约定，`business/` 业务约束，`pitfalls/` 已确认的踩坑经验 | 设计、实现和评审前查适用约束 |
 | `fronted/` 或 `frontend/` | `architecture/` 前端架构，`pages/` 页面与路由，`components/` 组件，`integration/` 接口集成 | 页面、交互、状态和前后端契约变更 |
 | `deploy/` | `environments/` 环境差异，`release/` 发布回滚，`runbooks/` 操作手册 | 涉及环境、数据库迁移、发布或排障 |
-| `increment/` | `<work-item>/`，包含需求、设计、任务、验证和评审资料。项目已按进行中和已完成分组时沿用实际分组 | 按工单恢复任务、复查设计或查历史迭代 |
+| `changes/` | `<work-item>/` 存放正在实施的需求、设计、任务、验证和评审资料，`archive/` 存放收尾后的工单。已有 `increment/` 或按状态分组的项目沿用实际路径 | 按工单恢复任务、复查设计或查历史变更 |
 
-显式要求新建目录且无项目约定时，顶层采用 `backend/`、`prd/`、`rules/`、`fronted/`、`deploy/`、`increment/`。已有 `frontend/` 时沿用。只有实际有内容或明确需要的专题才细分子目录。
+显式要求新建目录且无项目约定时，顶层采用 `backend/`、`prd/`、`rules/`、`fronted/`、`deploy/`、`changes/`。已有 `frontend/` 时沿用。只有实际有内容或明确需要的专题才细分子目录。
