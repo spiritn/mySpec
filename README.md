@@ -4,6 +4,7 @@
 
 | Skill | 负责什么 | 默认产出 |
 | --- | --- | --- |
+| `$init` | 读取项目文档，创建或刷新文档地图 | 项目根目录的 `AGENTS.md` |
 | `$workflow` | 组织四个阶段，支持按指定阶段执行和续跑 | 阶段产出、验证结果和评审结论 |
 | `$design` | 澄清业务需求，核对现有代码并形成技术方案 | `requirements.md`、`design.md` |
 | `$task` | 按依赖拆分方案，为各任务定义完成条件 | `tasks.md` |
@@ -17,6 +18,9 @@
 ```sh
 # 在指定项目启用全部 Skill
 python3 scripts/link-skills.py --project /path/to/project
+
+# 在指定项目启用文档初始化
+python3 scripts/link-skills.py --project /path/to/project init
 
 # 在指定项目启用总入口及其四个阶段
 python3 scripts/link-skills.py --project /path/to/project workflow
@@ -32,8 +36,11 @@ python3 scripts/link-skills.py --user
 
 把 [AGENTS.example.md](AGENTS.example.md) 中适用的段落合并进目标项目的 `AGENTS.md`，填写真实的模块边界、验证命令和项目约束。模板会指示 Codex 在读取通用规范前检查路径。项目的 `AGENTS.md`、团队规范与项目内代码约定保留优先级。
 
-默认每个需求有独立目录 `docs/changes/<work-item>/`。已有团队目录或工单编号时沿用。小改动可以缩短文档，就地修复可直接进入实现。下面的调用方式可以逐步试用。
+在目标项目的 Codex 会话里运行 `$init`，读取 `docs/` 或 `doc/` 的实际内容，创建或更新根目录 `AGENTS.md` 的文档地图。地图会标注各类文档的阅读时机和可用入口。已有项目指令继续由团队维护。
 
+每个需求有独立目录。优先采用项目约定或地图记录的 `increment/` 工作项路径，无项目约定时默认使用 `docs/changes/<work-item>/`。已有工单和工作项沿用原位置。小改动可以缩短文档，就地修复可直接进入实现。下面是常用入口。
+
+- `$init` 读取当前项目文档，建立或刷新 `AGENTS.md` 文档地图。
 - `$workflow` 做完「导出失败可重试」，写方案、拆任务、实现验证并评审当前 diff。
 - `$workflow` 继续工单 ABC-123，从已有任务开始，做到实现和验证。
 - `$design` 帮我澄清「导出失败可重试」，并核对现有代码，写出技术方案。也可以指定只做需求澄清。
