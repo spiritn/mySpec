@@ -20,10 +20,13 @@ def main():
     scope.add_argument("--user", action="store_true", help="use ~/.agents")
     scope.add_argument("--project", type=Path, metavar="PATH", help="use PATH/.agents")
     parser.add_argument("--dry-run", action="store_true", help="preview links without writing")
-    parser.add_argument("skills", nargs="*", help="skill names (default: all)")
+    parser.add_argument("skills", nargs="*", help="skill names (default: all; workflow includes its stages)")
     args = parser.parse_args()
 
-    selected = list(dict.fromkeys(args.skills or available))
+    requested = list(args.skills or available)
+    if "workflow" in requested:
+        requested.extend(("design", "task", "code", "review"))
+    selected = list(dict.fromkeys(requested))
     unknown = [name for name in selected if name not in available]
     if unknown or not selected:
         parser.error(f"Unknown or missing skills: {', '.join(unknown)}. Available: {', '.join(available)}")
