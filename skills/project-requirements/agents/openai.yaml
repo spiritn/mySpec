@@ -1,0 +1,4 @@
+interface:
+  display_name: "项目需求与方向审查"
+  short_description: "从原始目标拆解项目，独立双人审查方向，保留未知并生成简短建议"
+  default_prompt: "使用 $project-requirements，从原始需求组织双人方向审查，将目标、方案、进度、待定验证和人工确认的决策表集中更新到整体思路.md。"

@@ -12,6 +12,21 @@
 | `$review` | 结合需求、实际 diff、工程规则和上下游做独立评审 | 带证据的风险分流、变更摘要和验证范围，按需写入 `review.md` |
 | `$complete` | 核对完成证据，判断主规格是否需要更新并归档工作项 | 归档目录及 `completion.md`，按范围同步主规格 |
 
+## 方向审查：两个 Agent 与三个 Skill
+
+在立项、路线选择或项目中途重新检查：原始目标是什么，当前方案能否达到目标，下一步值得验证什么。`project_director` 负责提出整体思路，`independent_reviewer` 独立核对目标、证据与替代方案。两人先各自判断，再交叉复核。
+
+配套技能是 `$project-requirements`（需求与问题拆解）、`$project-research`（竞品与路线调研）、`$project-adr`（简短决策表）。它们与上面的开发流程分工衔接；人工确认的方向可交给 `$design` 和 `$workflow` 继续实施。
+
+```sh
+# 安装方向审查的两个角色和三个技能，需要 Python 3.11+
+python3 scripts/install-direction-review.py
+```
+
+默认安装到 `~/.codex/agents/` 和 `~/.agents/skills/`，更新已有不同版本需加 `--overwrite`，更新前会备份。安装后新开聊天。主文档的“当前判断”摘要最多 300 字，正文按目标、术语、调研、方案进度、待定与验证、决策表组织；决定由人工确认。
+
+详见 [方向审查安装与使用](docs/direction-review.md)，含调用示例、文档模板和更新方法。
+
 ## 在本机接入
 
 初始化脚本需要 Python 3.8 或更新版本，以及本机创建软链的权限。在共享仓库根目录执行以下任一组命令。

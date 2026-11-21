@@ -1,0 +1,22 @@
+# OS / Python
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local credentials and environment settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+auth.json
+credentials.json
+hosts.yml
+
+# Local generated data and installation backups
+direction-review-backups/
+work/

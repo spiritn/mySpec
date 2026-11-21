@@ -1,0 +1,6 @@
+interface:
+  display_name: "项目决策记录"
+  short_description: "在整体思路中用一张表维护项目决策、人工确认和依据，保留改判历史"
+  default_prompt: "使用 $project-adr 更新整体思路中的五列决策表，简写选项和建议，只把有人工确认的结论标为已决策。"
+policy:
+  allow_implicit_invocation: true
