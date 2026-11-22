@@ -23,9 +23,26 @@
 python3 scripts/install-direction-review.py
 ```
 
-默认安装到 `~/.codex/agents/` 和 `~/.agents/skills/`，更新已有不同版本需加 `--overwrite`，更新前会备份。安装后新开聊天。主文档的“当前判断”摘要最多 300 字，正文按目标、术语、调研、方案进度、待定与验证、决策表组织；决定由人工确认。
+默认安装到 `~/.codex/agents/` 和 `~/.agents/skills/`，采用软链引用本地仓库；迁移已有配置需加 `--overwrite`，迁移前会整体备份。以后修改用户目录中的对应文件，就会修改仓库源文件。安装或更新后新开聊天。主文档的“当前判断”摘要最多 300 字，正文按目标、术语、调研、方案进度、待定与验证、决策表组织；决定由人工确认。
 
 详见 [方向审查安装与使用](docs/direction-review.md)，含调用示例、文档模板和更新方法。
+
+## 三个独立代码评审 Agent
+
+代码评审默认从三个独立上下文展开，优先确认需求是否完整、正确实现；由主会话核查证据、按根因去重，并按高／中／低等级汇报。
+
+| Agent | 负责什么 |
+| --- | --- |
+| `code_review_functional` | 需求与逻辑正确性、真实边界、历史数据和上下游影响 |
+| `code_review_architecture` | 项目规范、模块边界、类与方法职责，以及有具体后果的设计问题 |
+| `code_review_performance` | 结合真实规模检查查询、重复工作、批量处理和资源成本 |
+
+```sh
+# 链接 review Skill、编码规范和仓库内全部 Agent；需要 Python 3.11+
+python3 scripts/link-skills.py --user --agents review
+```
+
+以后说“使用 `$review` 评审这次变更”即可，需提供或能定位需求与代码范围。规则见 [review Skill](skills/review/SKILL.md) 和[专项举证细则](skills/review/references/angles.md)。角色类型入口不可用时显式传入完整角色指令，并如实说明兼容调用。缺少独立上下文或专项未完成时，不能声称三专项评审完成。
 
 ## 在本机接入
 
@@ -48,7 +65,7 @@ python3 scripts/link-skills.py --project /path/to/project design task
 python3 scripts/link-skills.py --user
 ```
 
-项目级适合先在一个仓库试用。全局和项目级同时链接同名 Skill 时，Codex 可能显示两个同名入口。给任一命令加 `--dry-run` 可预览目标路径和冲突。选择 `workflow` 会同时链接 `design`、`task`、`code`、`review` 和 `complete`。脚本会链接通用编码规范，重复执行会复用指向同一来源的链接。已有文件或其他来源的链接需要手动处理。
+项目级适合先在一个仓库试用。方向审查的两个角色需额外运行上方专用安装器；已有三个 `project-*` 普通目录时先用专用安装器迁移。全局和项目级同时链接同名 Skill 时，Codex 可能显示两个同名入口。给任一命令加 `--dry-run` 可预览目标路径和冲突。选择 `workflow` 会同时链接 `design`、`task`、`code`、`review` 和 `complete`。脚本会链接通用编码规范，重复执行会复用指向同一来源的链接。已有文件或其他来源的链接需要手动处理。
 
 把 [AGENTS.example.md](AGENTS.example.md) 中适用的段落合并进目标项目的 `AGENTS.md`，填写真实的模块边界、验证命令和项目约束。模板会指示 Codex 在读取通用规范前检查路径。项目的 `AGENTS.md`、团队规范与项目内代码约定保留优先级。
 

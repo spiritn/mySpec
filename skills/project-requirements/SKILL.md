@@ -42,10 +42,10 @@ description: Define original project goals, decompose uncertain plans, or conduc
 
 聊天中的审阅正文、子 Agent 的判断，以及 `整体思路.md` 开头的 `## 当前判断` 均≤300个可见字符，首段≤100且包含在300内。整份主文档不套用300字限制；各节简写，详细证据优先引用已有资料，必要时放入已有主题的调研文档。不得为了控字拆出更多管理文件，也不得删掉会改变判断的条件。
 
-写后执行：
+写后执行；“本技能目录”使用当前 SKILL.md 所在目录的实际路径：
 
 ```bash
-python3 "{{SKILLS_DIR}}/project-requirements/scripts/check_document.py" "<整体思路.md绝对路径>" --overview
+python3 "<本技能目录>/scripts/check_document.py" "<整体思路.md绝对路径>" --overview
 ```
 
 `--overview` 检查开头摘要及全文图形；独立短答使用 `--brief`，专项资料不加这两个参数。检查器不证明推理正确；还须核对来源、未知项、人工确认、链接和整体因果关系。整理旧目录时先备份，再合并有效内容、修正引用并移除已合并文件；不抹掉原始资料和决策历史。

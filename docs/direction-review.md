@@ -24,25 +24,22 @@ cd mySpec
 python3 scripts/install-direction-review.py
 ```
 
-默认把技能放入 `~/.agents/skills/`，角色放入 `~/.codex/agents/`；设置了 `CODEX_HOME` 时，角色放入其 `agents/` 子目录。仓库中的 `{{SKILLS_DIR}}` 是安装变量，安装器会替换成当前机器的技能路径，因此不要直接复制角色模板使用。
+安装器把三个技能目录链接到 `~/.agents/skills/`，把两个角色文件链接到 `~/.codex/agents/`；设置了 `CODEX_HOME` 时使用其 `agents/` 子目录。用户目录与仓库指向同一份文件，修改任一入口都会改变仓库内容。角色按技能列表中的实际路径读取技能，不再生成路径替换副本。
 
-安装完成后新开一个 Codex 聊天。搜索、网页读取及代码读取工具由当前 Codex 环境提供；本仓库不创建账号、API 密钥或额外权限，也不单独启用定时任务。
-
-重复安装会跳过内容相同的文件。若已有不同版本，默认停止且不写入；确认更新时运行：
+首次迁移已有配置时，先预览，再执行：
 
 ```bash
+python3 scripts/install-direction-review.py --dry-run
 python3 scripts/install-direction-review.py --overwrite
 ```
 
-更新前会把冲突文件备份到角色目录上一级的 `direction-review-backups/`，并打印位置。查看计划用 `--dry-run`。也可以自定义安装目录：
+已有文件、目录和其他软链会先整体移动到角色目录上一级的 `direction-review-backups/`，保留原内容及恢复路径清单；默认不覆盖。已指向本仓库的软链会跳过，重复执行不会重复备份。自定义目标可用 `--skills-dir` 和 `--agents-dir`，Codex 仍须能够发现相应目录。
 
-```bash
-python3 scripts/install-direction-review.py --skills-dir "/path/to/skills" --agents-dir "/path/to/agents"
-```
+`python3 scripts/link-skills.py --user` 可链接仓库内全部技能和编码规范，与本脚本可以共同使用；先运行专用安装器可迁移旧的三个 `project-*` 技能。两个脚本都保留其他已安装技能。
 
-自定义目录用于测试或已有部署安排；Codex 仍须能够发现这些目录。安装器不会修改 Codex 的全局配置或自动添加搜索路径。
+保持仓库在固定位置。现有文件修改和 `git pull --ff-only` 更新会通过软链直接可见，Codex 请新开聊天加载；新增加技能时重跑链接脚本。编辑本地仓库不会自动提交或上传到 GitHub，仍需正常 `git add`、`git commit`、`git push`。
 
-这套角色与技能请使用上面的专用安装器。`scripts/link-skills.py` 是现有开发流程的软链入口；若此前用它链接过同名 `project-*` 技能，请先确认并移除相应软链，再运行专用安装器。专用安装器采用复制方式，后续 `git pull` 后需重跑安装器更新。
+搜索、网页读取等工具由当前 Codex 环境提供。本仓库不创建账号、API 密钥或额外权限，也不单独启用定时任务。
 
 ## 怎么用
 
@@ -74,7 +71,7 @@ docs/方向审查者/
 
 ## 修改与验证
 
-编辑仓库里的 `agents/` 与三个 `project-*` 技能，随后重新运行安装器。两个角色不覆盖主会话的模型、权限或沙箱设置；角色指令中的职责边界不等于技术权限隔离。
+编辑仓库里的 `agents/` 与三个 `project-*` 技能，或用户目录中的对应软链；修改后新开聊天读取。两个角色不覆盖主会话的模型、权限或沙箱设置；角色指令中的职责边界不等于技术权限隔离。
 
 检查生成的项目主文档：
 
