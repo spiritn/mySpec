@@ -27,6 +27,19 @@ python3 scripts/install-direction-review.py
 
 详见 [方向审查安装与使用](docs/direction-review.md)，含调用示例、文档模板和更新方法。
 
+## 需求澄清与方案设计
+
+`$design` 由主会话负责需求澄清，用一句话讲清目标、可观察验收和影响下一步的未知。复杂方案可交给 `solution_designer` 深入调查，再由 `solution_reviewer` 独立核对需求完整性、依据与复杂度；简单需求不强制启动两个角色。
+
+两个角色使用同一份 [design Skill](skills/design/SKILL.md)，只返回建议，正式需求与方案仍由主会话统一维护。方案检查记在 `design.md` 内，不为每轮新增文档；允许部分继续、部分待定。方案检查不代替方向审查或后续代码评审。
+
+```sh
+# 链接 design/workflow 与关联阶段技能，并链接仓库内全部 Agent；需要 Python 3.11+
+python3 scripts/link-skills.py --user --agents design workflow
+```
+
+例如：“使用 `$design`，先帮我澄清这个需求，暂不写方案”；或“使用 `$workflow`，为这项跨模块需求设计方案并独立检查，先做到方案”。共享规则包含角色不可用时的完整指令兼容加载和未完成说明。
+
 ## 三个独立代码评审 Agent
 
 代码评审默认从三个独立上下文展开，优先确认需求是否完整、正确实现；由主会话核查证据、按根因去重，并按高／中／低等级汇报。
