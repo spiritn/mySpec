@@ -40,6 +40,19 @@ python3 scripts/link-skills.py --user --agents design workflow
 
 例如：“使用 `$design`，先帮我澄清这个需求，暂不写方案”；或“使用 `$workflow`，为这项跨模块需求设计方案并独立检查，先做到方案”。共享规则包含角色不可用时的完整指令兼容加载和未完成说明。
 
+## 任务拆解与编码执行
+
+`$task` 按实际成果、依赖和验收拆工作，复杂时可由 `task_planner` 只读提出建议；主会话统一维护任务清单。`$code` 可委派 `code_implementer` 在明确范围内实现与验证，小改动仍可由主会话直接完成。
+
+任务交接包含原始目的、验收、代码基线、可写范围、前置产出及完成证据。只有依赖具备且范围和共享契约不会冲突时才并行；执行者保留他人改动，不同时回填 tasks.md。主会话验证集成后的完整需求，再按范围组织已有独立代码评审。
+
+```sh
+# 链接任务、编码、workflow 与关联 Skill，以及仓库内全部 Agent
+python3 scripts/link-skills.py --user --agents task code workflow
+```
+
+方法和[任务模板](skills/task/assets/tasks.md)分别见 [task](skills/task/SKILL.md)、[code](skills/code/SKILL.md)。状态区分未开始、进行中、已实现待验证、已完成和阻塞，只有满足本项完成条件才勾选。只请求拆解时不编码；任务清单不额外授予提交、部署或数据操作权限。
+
 ## 三个独立代码评审 Agent
 
 代码评审默认从三个独立上下文展开，优先确认需求是否完整、正确实现；由主会话核查证据、按根因去重，并按高／中／低等级汇报。
